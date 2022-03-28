@@ -1,0 +1,39 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debounce</title>
+  </head>
+  <body>
+    <input onclick="callback1(1,2,3)" type="button" value="爆炸1" />
+    <input onclick="callback2(1,2,3)" type="button" value="爆炸2" />
+  </body>
+  <script>
+    function debounce(callback, duration = 1000, immediate = false) {
+      if (typeof callback !== "function")
+        throw new TypeError("Func must be a function");
+      let timer = null;
+      return function anonymous(...params) {
+        clearTimeout(timer);
+        let now = immediate && !timer;
+        timer = setTimeout(() => {
+          timer = null;
+          immediate ? null : callback.call(this, ...params);
+        }, duration);
+        now ? callback.call(this, ...params) : null;
+      };
+    }
+
+    var callback1 = debounce((a, b, c) => {
+      console.log(a, b, c);
+    }, 500);
+    var callback2 = debounce(
+      (a, b, c) => {
+        console.log(a, b, c);
+      },
+      1000,
+      true
+    );
+  </script>
+</html>
